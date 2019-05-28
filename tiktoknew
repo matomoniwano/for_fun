@@ -1,0 +1,210 @@
+#!/bin/bash
+gameturn=1
+whole=1
+array(){
+
+echo '1 | 2 | 3'
+echo '----------'
+echo '4 | 5 | 6'
+echo '----------'
+echo '7 | 8 | 9'
+echo
+echo
+echo ============
+echo
+echo 'Choose your number'
+echo
+echo
+
+}
+
+choice(){
+echo
+echo 
+echo
+echo "$a | $b | $c"
+echo "------------"
+echo "$d | $e | $f"
+echo "------------"
+echo "$g | $h | $i"
+echo
+echo =====================
+
+
+}
+win(){
+
+if [[ $1 = 'O' ]] && [[ $2 = 'O' ]] && [[ $3 = 'O' ]];
+then 
+	echo
+	echo
+	echo       YOU WIN!!! 
+	echo       
+	((gameturn++))
+	echo $fill
+elif [[ $1 = 'X' ]] && [[ $2 = 'X' ]] && [[ $3 = 'X' ]];
+then
+	echo
+	echo
+	echo       YOU LOSE!!
+	((gameturn++))
+	echo $fill
+fi
+}
+
+winpattern(){
+
+win $a $b $c
+win $d $e $f
+win $g $h $i
+win $a $s $g
+win $b $e $h
+win $c $f $i
+win $a $e $i
+win $c $e $g
+
+}
+a=' '
+b=' '
+c=' '
+d=' '
+e=' '
+f=' '
+d=' '
+f=' '
+g=' '
+h=' '
+i=' '
+answercase(){
+read -p 'your number: ' answer
+for user in "$fill" ;
+do
+if [[ "$user" != "$answer" ]] ;
+then
+	case "$answer" in 
+	1)
+	a='O'
+	((trial++))
+	;;
+	2)
+	b='O'
+	((trial++))
+	;;
+	3)
+	c='O'
+	((trial++))
+	;;
+	4)
+	d='O'
+	((trial++))
+	;;
+	5)
+	e='O'
+	((trial++))
+	;;
+	6)
+	f='O'
+	((trial++))
+	;;
+	7)
+	g='O'
+	((trial++))
+	;;
+	8)
+	h='O'
+	((trial++))
+	;;
+	9)
+	i='O'
+	((trial++))
+	;;
+	*)
+	echo 'Please choose a correct letter and try again'
+	esac
+else 
+	echo 'Please choose a correct number and try again'
+fi
+done
+}
+enermy(){
+	echo enermy has made a move
+	for spot in "$fill"
+	do
+		if [[ "$spot" != "$1" ]] ;
+		then
+		case "$1" in 
+		1)
+		a=X
+		((opponent++))
+		;;
+		2)
+		b='X'
+		((opponent++))
+		;;
+		3)
+		c='X'
+		((opponent++))
+		;;
+		4)
+		d='X'
+		((opponent++))
+		;;
+		5)
+		e='X'
+		((opponent++))
+		;;
+		6)
+		f='X'
+		((opponent++))
+		;;
+		7)
+		g='X'
+		((opponent++))
+		;;
+		8)
+		h='X'
+		((opponent++))
+		;;
+		9)
+		i='X'
+		((opponent++))
+		;;
+		*)
+		echo
+		esac
+	else
+		echo fuk u
+	fi
+done
+
+}
+flow(){
+	trial='1'
+	array
+	while [ $trial = '1' ]
+	do
+		answercase
+		fill+=("$answer")
+	done
+	choice
+	winpattern
+	trial='1'
+	opponent='1'
+	while [ $opponent = '1' ]
+	do
+		number=$(( $RANDOM % 10 ))
+		shuffle=$( echo $number )
+		enermy "$shuffle"
+		fill+=("$shuffle")
+	done
+	choice
+	winpattern
+	opponent='1'
+}
+fill=()
+while [ $gameturn = '1' ]
+do
+flow
+done
+echo $fill
+exit
