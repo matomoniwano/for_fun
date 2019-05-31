@@ -1,22 +1,4 @@
 #!/bin/bash
-gameturn=1
-whole=1
-array(){
-
-echo '1 | 2 | 3'
-echo '----------'
-echo '4 | 5 | 6'
-echo '----------'
-echo '7 | 8 | 9'
-echo
-echo
-echo ============
-echo
-echo 'Choose your number'
-echo
-echo
-
-}
 
 choice(){
 echo
@@ -29,7 +11,7 @@ echo "------------"
 echo "$g | $h | $i"
 echo
 echo =====================
-
+echo =====================
 
 }
 win(){
@@ -40,15 +22,16 @@ then
 	echo
 	echo       YOU WIN!!! 
 	echo       
-	((gameturn++))
-	echo $fill
+	echo
+	exit
 elif [[ $1 = 'X' ]] && [[ $2 = 'X' ]] && [[ $3 = 'X' ]];
 then
 	echo
 	echo
 	echo       YOU LOSE!!
-	((gameturn++))
-	echo $fill
+	echo
+	exit
+else echo
 fi
 }
 
@@ -64,24 +47,26 @@ win $a $e $i
 win $c $e $g
 
 }
-a=' '
-b=' '
-c=' '
-d=' '
-e=' '
-f=' '
-d=' '
-f=' '
-g=' '
-h=' '
-i=' '
+abc(){ 
+a='1'
+b='2'
+c='3'
+d='4'
+e='5'
+f='6'
+g='7'
+h='8'
+i='9'
+}
 answercase(){
-read -p 'your number: ' answer
-for user in "$fill" ;
-do
-if [[ "$user" != "$answer" ]] ;
+read -p 'your turn! choose a number: ' answer
+if echo "${fill[@]}" | grep " "$answer" " ;
 then
-	case "$answer" in 
+	echo
+	echo 'Please choose a correct number and try again'
+	echo
+else
+	case $answer in 
 	1)
 	a='O'
 	((trial++))
@@ -119,22 +104,20 @@ then
 	((trial++))
 	;;
 	*)
-	echo 'Please choose a correct letter and try again'
-	esac
-else 
 	echo 'Please choose a correct number and try again'
+	esac
+	
 fi
-done
 }
 enermy(){
-	echo enermy has made a move
-	for spot in "$fill"
-	do
-		if [[ "$spot" != "$1" ]] ;
+	echo
+		if echo "${fill[@]}" | grep " "$1" " ;
 		then
+	echo	
+	else
 		case "$1" in 
 		1)
-		a=X
+		a='X'
 		((opponent++))
 		;;
 		2)
@@ -172,39 +155,47 @@ enermy(){
 		*)
 		echo
 		esac
-	else
-		echo fuk u
 	fi
-done
 
 }
-flow(){
+flow1(){
 	trial='1'
-	array
+	choice
 	while [ $trial = '1' ]
 	do
 		answercase
-		fill+=("$answer")
+		fill+=(""$answer" ")
 	done
 	choice
+	gameturn=$(( $gameturn + 1 ))
 	winpattern
 	trial='1'
+}
+flow2(){
 	opponent='1'
+	echo ${fill[@]}
 	while [ $opponent = '1' ]
 	do
 		number=$(( $RANDOM % 10 ))
 		shuffle=$( echo $number )
 		enermy "$shuffle"
-		fill+=("$shuffle")
+		fill+=(""$shuffle" ")
 	done
-	choice
-	winpattern
+	gameturn=$(( $gameturn + 1 ))
 	opponent='1'
 }
+abc
+gameturn=1
+whole=1
 fill=()
-while [ $gameturn = '1' ]
+fill+=('0')
+until [ $gameturn = 10 ] ; 
 do
-flow
+flow1
+echo Computer has made a move
+flow2 > /dev/null 2>&1
+winpattern	
+choice
 done
-echo $fill
 exit
+
